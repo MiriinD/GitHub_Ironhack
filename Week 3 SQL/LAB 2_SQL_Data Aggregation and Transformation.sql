@@ -83,7 +83,7 @@ FROM film;
 
 SELECT COUNT(film_id) AS Total_number_of_films, rating
 FROM film
-GROUP BY rating
+GROUP BY rating;
 
 
 
@@ -93,12 +93,26 @@ GROUP BY rating
 #This will help identify popular movie lengths for each category.
 
 
-
+SELECT rating, ROUND(AVG(length), 2) AS avg_duration
+FROM film
+GROUP BY rating
+ORDER BY avg_duration DESC;
 
 #2.2 Identify which ratings have a mean duration of over two hours in order to help select films for 
 #customers who prefer longer movies.
 
-
+SELECT 
+    rating,
+    ROUND(AVG(length), 2) AS avg_duration
+FROM film
+GROUP BY rating
+HAVING avg_duration > 120;
 
 
 #Bonus: determine which last names are not repeated in the table actor.
+
+SELECT 
+    last_name
+FROM actor
+GROUP BY last_name
+HAVING COUNT(*) = 1;

@@ -55,8 +55,19 @@ LIMIT 10;
 
 SELECT first_name
 FROM actor
-WHERE first_name= "SCARLETT"
+WHERE first_name= "SCARLETT";
 
+#BONUS:
 
+#7.2 Retrieve all movies that have ARMAGEDDON in their title and have a duration longer than 100 minutes.
+SELECT 
+    title, 
+    length
+FROM film
+WHERE title LIKE '%ARMAGEDDON%' AND length > 100;
 
-
+#Determine the number of films that include Behind the Scenes content
+SELECT 
+    COUNT(*) AS num_films_with_behind_the_scenes
+FROM film
+WHERE special_features LIKE '%Behind the Scenes%';
