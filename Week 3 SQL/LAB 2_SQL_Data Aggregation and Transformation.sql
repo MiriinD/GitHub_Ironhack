@@ -14,7 +14,7 @@ SELECT #How the concat works?
     CONCAT(
         FLOOR(AVG(length) / 60),
         ' hours ',
-        AVG(length) % 60,
+        ROUND(AVG(length) % 60),
         ' minutes'
     ) AS avg_duration
 FROM film;
@@ -38,8 +38,21 @@ SELECT
 FROM rental
 LIMIT 20;
 
+
+
 #BONUS:Retrieve rental information and add an additional column called DAY_TYPE with values 'weekend' or 'workday', depending on the day of the week.
 #Hint: use a conditional expression.
+
+SELECT 
+    rental_id,
+    rental_date,
+    DATE_FORMAT(rental_date, '%W') AS day_of_week,
+    CASE 
+        WHEN DATE_FORMAT(rental_date, '%W') IN ('Saturday', 'Sunday') THEN 'weekend'
+        ELSE 'workday'
+    END AS DAY_TYPE
+FROM rental;
+
 
 SELECT 
     rental_id,
@@ -49,6 +62,23 @@ SELECT
         ELSE 'workday'
     END AS DAY_TYPE
 FROM rental;
+
+
+
+SELECT DATE_FORMAT(rental_date, '%M') AS Month,
+       DATE_FORMAT(rental_date, '%W') AS Weekday,
+       CASE
+           WHEN DATE_FORMAT(rental_date, '%W') IN ('Saturday', 'Sunday') THEN 'weekend'
+           ELSE 'workday'
+       END AS DAY_TYPE
+FROM rental
+LIMIT 20;
+
+
+SELECT DATE_FORMAT(rental_date, '%M') AS Month,
+    DATE_FORMAT(rental_date, '%W') AS Weekday
+FROM rental
+LIMIT 20;
 
 #You need to ensure that customers can easily access information about the movie collection. To achieve this, retrieve the film titles and their rental duration. 
 #If any rental duration value is NULL, replace it with the string 'Not Available'. Sort the results of the film title in ascending order.
@@ -69,7 +99,7 @@ ORDER BY title ASC;
 
 SELECT 
     CONCAT(first_name, ' ', last_name) AS full_name,
-    SUBSTRING_INDEX(email, '@', 1) AS email_prefix #Don't totally get this
+    LEFT(email, 3) AS email_prefix #Don't totally get this
 FROM customer
 ORDER BY last_name ASC;
 

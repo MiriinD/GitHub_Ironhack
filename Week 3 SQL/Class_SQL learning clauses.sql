@@ -74,6 +74,8 @@ FROM loan;
 SELECT account_id, ROUND(amount,-2)
 FROM loan;
 
+
+#INNER JOIN
 SELECT a.account_id, district_id, amount
 FROM account AS a
 INNER JOIN loan as l

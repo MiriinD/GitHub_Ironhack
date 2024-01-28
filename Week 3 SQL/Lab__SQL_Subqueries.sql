@@ -1,35 +1,52 @@
 USE sakila;
 #1 Determine the number of copies of the film "Hunchback Impossible" that exist in the inventory system.
+
 SELECT
-		(SELECT title FROM film WHERE film_id = inv.film_id) AS film_title,
-		COUNT(*) AS num_copies
-		FROM inventory AS inv
-		WHERE inv.film_id =
-							(SELECT film_id FROM film WHERE title = 'Hunchback Impossible')
-		GROUP BY inv.film_id;
+		(SELECT title 
+        FROM film 
+        WHERE film_id = inv.film_id) AS film_title,
+		COUNT(*) AS num_copies #don't get this, without chat gpt I couldn't :(
+	FROM inventory AS inv
+	WHERE inv.film_id =
+							(SELECT film_id 
+							FROM film 
+                            WHERE title = 'Hunchback Impossible')
+	GROUP BY inv.film_id;
+
 
 
 #2 List all films whose length is longer than the average length of all the films in the Sakila database.
 
-SELECT 
-    title, 
-    length
+SELECT title, length
 FROM film
-WHERE length > (SELECT AVG(length) FROM film);
+WHERE length > (SELECT AVG (length) AS avg_length
+				FROM film);
 
 
 #3 Use a subquery to display all actors who appear in the film "Alone Trip".
 
-
-SELECT actor.actor_id, actor.first_name, actor.last_name
+SELECT actor_id, first_name, last_name
 FROM actor
-WHERE actor_id IN (SELECT actor_id FROM film_actor WHERE film_id = (SELECT film_id FROM film WHERE title = 'Alone Trip'));
+WHERE actor_id IN (SELECT actor_id
+					FROM film_actor
+                    WHERE film_id= (SELECT film_id 
+									FROM film 
+									WHERE title = 'Alone Trip'));
+
 
 
 #BONUS
 
 #4 Sales have been lagging among young families, and you want to target family movies for a promotion. Identify all movies categorized as family films.
-
+SELECT title
+FROM film
+WHERE film_id IN
+				(SELECT film_id
+                FROM film_category
+                WHERE category_id IN
+								(SELECT category_id
+								FROM category
+								WHERE name= "Family"));
 
 #5 Retrieve the name and email of customers from Canada using both subqueries and joins. 
 #To use joins, you will need to identify the relevant tables and their primary and foreign keys.
@@ -71,6 +88,7 @@ WHERE customer_id = (SELECT customer_id
 GROUP BY title;
 
 #Using only subqueries
+
 SELECT title
 FROM film
 WHERE film_id IN (SELECT film_id	
@@ -92,7 +110,9 @@ FROM payment
 GROUP BY customer_id
 HAVING total_spent_p_c > (SELECT AVG(total_spent)
 							FROM	(SELECT SUM(amount) AS total_spent #give this a name
-							FROM payment
-							GROUP BY customer_id) AS tspc);
+									FROM payment
+									GROUP BY customer_id) AS tspc);
+
+
 
 
